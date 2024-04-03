@@ -1,5 +1,6 @@
 # Project's Ignored Files
 lib/made_by_lovish.dart
+lib/utils/colors.dart
 
 # Miscellaneous
 *.class
