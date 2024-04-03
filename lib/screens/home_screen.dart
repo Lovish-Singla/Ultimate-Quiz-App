@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_app/made_by_lovish.dart';
-import 'package:quiz_app/screens/game_screen.dart';
+import 'package:quiz_app/screens/categories.dart';
 import 'package:quiz_app/utils/colors.dart';
 import 'package:quiz_app/widgets/quiz_button.dart';
 import 'package:quiz_app/widgets/quiz_text.dart';
@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const GameScreen(),
+                      builder: (context) => const CategoryPage(),
                     ),
                   );
                 },

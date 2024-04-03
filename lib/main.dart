@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app/screens/categories.dart';
 import 'package:quiz_app/screens/home_screen.dart';
+import 'package:quiz_app/utils/colors.dart';
 
 void main() {
   runApp(const QuizApp());
@@ -16,9 +18,11 @@ class QuizApp extends StatelessWidget {
       title: 'Trivia App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        iconTheme: IconThemeData(color: QuizAppColors.textColor),
         useMaterial3: true,
       ),
-      home: HomeScreen(),
+      // home: HomeScreen(),
+      home: CategoryPage(),
     );
   }
 }

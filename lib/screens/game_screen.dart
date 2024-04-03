@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:quiz_app/made_by_lovish.dart';
 import 'package:quiz_app/models/trivia_question.dart';
 import 'package:quiz_app/utils/colors.dart';
@@ -122,10 +121,32 @@ class _GameScreenState extends State<GameScreen> {
                                         : () {
                                             _checkAnswer(option);
                                           },
-                                    child: QuizText(
-                                      text: option,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        QuizText(
+                                          text: option,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                        ),
+                                        if (_answerSubmitted &&
+                                            option ==
+                                                _questions[_currentIndex]
+                                                    .correctAnswer)
+                                          const Icon(
+                                            Icons.check_rounded,
+                                            color: Colors.green,
+                                          ),
+                                        if (_answerSubmitted &&
+                                            option !=
+                                                _questions[_currentIndex]
+                                                    .correctAnswer)
+                                          const Icon(
+                                            Icons.close_rounded,
+                                            color: Colors.red,
+                                          )
+                                      ],
                                     ),
                                   ),
                                   const SizedBox(height: 10),
