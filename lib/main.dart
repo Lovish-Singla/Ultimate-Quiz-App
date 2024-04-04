@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_app/screens/categories.dart';
 import 'package:quiz_app/screens/home_screen.dart';
+import 'package:quiz_app/screens/results_screen.dart';
 import 'package:quiz_app/utils/colors.dart';
 
 void main() {
@@ -22,7 +22,7 @@ class QuizApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // home: HomeScreen(),
-      home: CategoryPage(),
+      home: ResultsPage(),
     );
   }
 }

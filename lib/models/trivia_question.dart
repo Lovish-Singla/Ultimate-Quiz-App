@@ -41,7 +41,7 @@ class TriviaQuestion {
       correctAnswer: unescape.convert(json['correct_answer']),
       incorrectAnswers: incorrectOptions,
       options: allOptions,
-      isCorrect: null,
+      isCorrect: false,
     );
   }
 }
