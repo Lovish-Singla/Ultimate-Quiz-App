@@ -23,13 +23,12 @@ class TriviaQuestion {
 
     List<String> incorrectOptions =
         List<String>.from(json['incorrect_answers']);
-    List<String> incorrAns = [];
+
     for (var i = 0; i < incorrectOptions.length; i++) {
-      String incorrectAns = unescape.convert(incorrectOptions[i]);
-      incorrAns.add(incorrectAns);
+      incorrectOptions[i] = unescape.convert(incorrectOptions[i]);
     }
 
-    final List<String> allOptions = incorrAns;
+    final List<String> allOptions = incorrectOptions;
 
     allOptions.add(unescape.convert(json['correct_answer']));
 
@@ -41,7 +40,7 @@ class TriviaQuestion {
       correctAnswer: unescape.convert(json['correct_answer']),
       incorrectAnswers: incorrectOptions,
       options: allOptions,
-      isCorrect: false,
+      isCorrect: null,
     );
   }
 }

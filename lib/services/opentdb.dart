@@ -5,10 +5,20 @@ import '../models/trivia_question.dart';
 class TriviaApiService {
   static const String _baseUrl = 'https://opentdb.com/api.php';
 
-  Future<List<TriviaQuestion>> fetchTriviaQuestions(
-      {required int amount, int? categoryID}) async {
-    final url = Uri.parse('$_baseUrl?amount=$amount&type=multiple' +
-        (categoryID != null ? '&category=$categoryID' : ''));
+  Future<List<TriviaQuestion>> fetchTriviaQuestions({
+    required int amount,
+    int? categoryID,
+    String? difficulty,
+  }) async {
+    String queryParams = 'amount=$amount&type=multiple';
+    if (categoryID != null) {
+      queryParams += '&category=$categoryID';
+    }
+    if (difficulty != null) {
+      queryParams += '&difficulty=$difficulty';
+    }
+
+    final url = Uri.parse('$_baseUrl?$queryParams');
 
     final response = await http.get(url);
 

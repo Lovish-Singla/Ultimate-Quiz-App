@@ -7,7 +7,15 @@ import 'package:quiz_app/widgets/quiz_text.dart';
 import 'package:quiz_app/services/opentdb.dart';
 
 class GameScreen extends StatefulWidget {
-  const GameScreen({super.key});
+  final int categoryID;
+  final int numberOfQuestions;
+  final String difficulty;
+  const GameScreen({
+    super.key,
+    required this.categoryID,
+    required this.numberOfQuestions,
+    required this.difficulty,
+  });
 
   @override
   State<GameScreen> createState() => _GameScreenState();
@@ -16,7 +24,7 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen> {
   List<TriviaQuestion> _questions = [];
   int _currentIndex = 0;
-  bool _answerSubmitted = false;
+  // bool _answerSubmitted = false;
   // final List<String> _options = [
   //   'Option 1',
   //   'Option 2',
@@ -40,8 +48,10 @@ class _GameScreenState extends State<GameScreen> {
     try {
       final apiService = TriviaApiService();
       final questions = await apiService.fetchTriviaQuestions(
-          amount:
-              10); // Example: 10 questions from General Knowledge category (id: 9)
+        amount: 10,
+        categoryID: widget.categoryID >= 9 ? widget.categoryID : null,
+        difficulty: widget.difficulty,
+      ); // Example: 10 questions from General Knowledge category (id: 9)
       setState(() {
         _questions = questions;
       });
@@ -52,7 +62,7 @@ class _GameScreenState extends State<GameScreen> {
 
   void _checkAnswer(String selectedOption) {
     setState(() {
-      _answerSubmitted = true;
+      // _answerSubmitted = true;
       if (selectedOption == _questions[_currentIndex].correctAnswer) {
         // Correct answer
         _questions[_currentIndex].isCorrect = true;
@@ -76,6 +86,7 @@ class _GameScreenState extends State<GameScreen> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: QuizAppColors.darkColor,
+        iconTheme: const IconThemeData(color: QuizAppColors.textColor),
         title: const QuizText(
           text: "T R I V I A",
           fontSize: 30,
@@ -116,11 +127,10 @@ class _GameScreenState extends State<GameScreen> {
                               (option) => Column(
                                 children: [
                                   QuizButton(
-                                    onPressed: _answerSubmitted
-                                        ? null
-                                        : () {
-                                            _checkAnswer(option);
-                                          },
+                                    onPressed: () {
+                                      _checkAnswer(option);
+                                      _nextQuestion();
+                                    },
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -130,22 +140,22 @@ class _GameScreenState extends State<GameScreen> {
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20,
                                         ),
-                                        if (_answerSubmitted &&
-                                            option ==
-                                                _questions[_currentIndex]
-                                                    .correctAnswer)
-                                          const Icon(
-                                            Icons.check_rounded,
-                                            color: Colors.green,
-                                          ),
-                                        if (_answerSubmitted &&
-                                            option !=
-                                                _questions[_currentIndex]
-                                                    .correctAnswer)
-                                          const Icon(
-                                            Icons.close_rounded,
-                                            color: Colors.red,
-                                          )
+                                        // if (_answerSubmitted &&
+                                        //     option ==
+                                        //         _questions[_currentIndex]
+                                        //             .correctAnswer)
+                                        //   const Icon(
+                                        //     Icons.check_rounded,
+                                        //     color: Colors.green,
+                                        //   ),
+                                        // if (_answerSubmitted &&
+                                        //     option !=
+                                        //         _questions[_currentIndex]
+                                        //             .correctAnswer)
+                                        //   const Icon(
+                                        //     Icons.close_rounded,
+                                        //     color: Colors.red,
+                                        //   )
                                       ],
                                     ),
                                   ),
