@@ -1,18 +1,23 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:quiz_app/made_by_lovish.dart';
+import 'package:quiz_app/models/category.dart';
 import 'package:quiz_app/models/trivia_question.dart';
+import 'package:quiz_app/screens/error_screen.dart';
+import 'package:quiz_app/screens/results_screen.dart';
 import 'package:quiz_app/utils/colors.dart';
 import 'package:quiz_app/widgets/quiz_button.dart';
 import 'package:quiz_app/widgets/quiz_text.dart';
 import 'package:quiz_app/services/opentdb.dart';
 
 class GameScreen extends StatefulWidget {
-  final int categoryID;
+  final Category category;
   final int numberOfQuestions;
   final String difficulty;
   const GameScreen({
     super.key,
-    required this.categoryID,
+    required this.category,
     required this.numberOfQuestions,
     required this.difficulty,
   });
@@ -24,19 +29,7 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen> {
   List<TriviaQuestion> _questions = [];
   int _currentIndex = 0;
-  // bool _answerSubmitted = false;
-  // final List<String> _options = [
-  //   'Option 1',
-  //   'Option 2',
-  //   'Option 3',
-  //   'Option 4'
-  // ]; // Example options
-  // final List<String> _questions = [
-  //   // Example questions
-  //   'Question 1: What is the capital of France?',
-  //   'Question 2: What is the largest planet in our solar system?',
-  //   'Question 3: Who wrote "To Kill a Mockingbird"?',
-  // ];
+  List<bool?> _userAnswers = [];
 
   @override
   void initState() {
@@ -49,33 +42,50 @@ class _GameScreenState extends State<GameScreen> {
       final apiService = TriviaApiService();
       final questions = await apiService.fetchTriviaQuestions(
         amount: 10,
-        categoryID: widget.categoryID >= 9 ? widget.categoryID : null,
+        categoryID: widget.category.id >= 9 ? widget.category.id : null,
         difficulty: widget.difficulty,
       ); // Example: 10 questions from General Knowledge category (id: 9)
       setState(() {
         _questions = questions;
+        _userAnswers = List<bool?>.filled(questions.length, null);
       });
     } catch (e) {
-      print('Error fetching trivia questions: $e');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              ErrorScreen(errorMesage: 'Error fetching trivia questions: $e'),
+        ),
+      );
     }
   }
 
   void _checkAnswer(String selectedOption) {
     setState(() {
-      // _answerSubmitted = true;
-      if (selectedOption == _questions[_currentIndex].correctAnswer) {
-        // Correct answer
-        _questions[_currentIndex].isCorrect = true;
-      } else {
-        // Incorrect answer
-        _questions[_currentIndex].isCorrect = false;
-      }
+      final isCorrect =
+          selectedOption == _questions[_currentIndex].correctAnswer;
+      _questions[_currentIndex].isCorrect = isCorrect;
+      _userAnswers[_currentIndex] = isCorrect;
+      // print(selectedOption);
     });
   }
 
   void _nextQuestion() {
     setState(() {
       _currentIndex = (_currentIndex + 1) % _questions.length;
+      if (_currentIndex == _questions.length - 1) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ResultsPage(
+              questions: _questions,
+              userAnswers: _userAnswers,
+              category: widget.category,
+              difficulty: widget.difficulty,
+            ),
+          ),
+        );
+      }
     });
   }
 

@@ -122,7 +122,7 @@ void _showDialogOptions(BuildContext context, Category category) {
                   context,
                   MaterialPageRoute(
                     builder: (context) => GameScreen(
-                      categoryID: category.id,
+                      category: category,
                       numberOfQuestions: numberOfQuestions,
                       difficulty: difficulty,
                     ),
